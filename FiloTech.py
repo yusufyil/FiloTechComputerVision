@@ -12,6 +12,8 @@ height = cap.get(cv.CAP_PROP_FRAME_HEIGHT)
 kernel = np.ones((5, 5))
 #kernel for dilation
 
+
+#Warning if trackbars fail to work, you can change values by changing default values of bars from below
 cv.namedWindow("Parameters")
 #cv.resizeWindow("Parameters", 640, 480)
 cv.createTrackbar("GaussBlur", "Parameters", 1, 30, emptyFunc)
@@ -24,6 +26,7 @@ cv.createTrackbar("MinPoints", "Parameters", 6, 30, emptyFunc)
 cv.createTrackbar("MaxPoints", "Parameters", 10, 30, emptyFunc)
 cv.createTrackbar("PolylineCoefficient", "Parameters", 2, 200, emptyFunc)
 #last value will be divided by 100
+
 
 
 
