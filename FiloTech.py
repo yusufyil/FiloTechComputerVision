@@ -20,10 +20,10 @@ cv.createTrackbar("GaussBlur", "Parameters", 1, 30, emptyFunc)
 cv.createTrackbar("CannyThresh1", "Parameters", 24, 255, emptyFunc)
 cv.createTrackbar("CannyThresh2", "Parameters", 19, 255, emptyFunc)
 cv.createTrackbar("DilationIteration", "Parameters", 1, 20, emptyFunc)
-cv.createTrackbar("MinArea", "Parameters", 200, int(width * height - 200), emptyFunc)
+cv.createTrackbar("MinArea", "Parameters", 20000, int(width * height - 200), emptyFunc)
 cv.createTrackbar("MaxArea", "Parameters", int(width * height - 200), int(width * height), emptyFunc)
-cv.createTrackbar("MinPoints", "Parameters", 6, 30, emptyFunc)
-cv.createTrackbar("MaxPoints", "Parameters", 10, 30, emptyFunc)
+cv.createTrackbar("MinPoints", "Parameters", 7, 30, emptyFunc)
+cv.createTrackbar("MaxPoints", "Parameters", 9, 30, emptyFunc)
 cv.createTrackbar("PolylineCoefficient", "Parameters", 2, 200, emptyFunc)
 #last value will be divided by 100
 
@@ -45,7 +45,7 @@ while True:
     #uncomment previous line for blured frame
 
     grayFrame = cv.cvtColor(bluredFrame, cv.COLOR_BGR2GRAY)
-    #cv.imshow("gray frame", grayFrame)
+    cv.imshow("gray frame", grayFrame)
     #uncomment previous line for gray frame
 
     cannyThresh1 = cv.getTrackbarPos("CannyThresh1", "Parameters")
