@@ -16,17 +16,16 @@ kernel = np.ones((5, 5))
 #Warning if trackbars fail to work, you can change values by changing default values of bars from below
 cv.namedWindow("Parameters")
 #cv.resizeWindow("Parameters", 640, 480)
-cv.createTrackbar("GaussBlur", "Parameters", 1, 30, emptyFunc)
-cv.createTrackbar("CannyThresh1", "Parameters", 24, 255, emptyFunc)
-cv.createTrackbar("CannyThresh2", "Parameters", 19, 255, emptyFunc)
+cv.createTrackbar("GaussBlur", "Parameters", 0, 30, emptyFunc)
+cv.createTrackbar("CannyThresh1", "Parameters", 55, 255, emptyFunc)
+cv.createTrackbar("CannyThresh2", "Parameters", 100, 255, emptyFunc)
 cv.createTrackbar("DilationIteration", "Parameters", 1, 20, emptyFunc)
-cv.createTrackbar("MinArea", "Parameters", 20000, int(width * height - 200), emptyFunc)
+cv.createTrackbar("MinArea", "Parameters", 2000, int(width * height - 200), emptyFunc)
 cv.createTrackbar("MaxArea", "Parameters", int(width * height - 200), int(width * height), emptyFunc)
 cv.createTrackbar("MinPoints", "Parameters", 7, 30, emptyFunc)
 cv.createTrackbar("MaxPoints", "Parameters", 9, 30, emptyFunc)
 cv.createTrackbar("PolylineCoefficient", "Parameters", 2, 200, emptyFunc)
 #last value will be divided by 100
-
 
 
 
@@ -39,10 +38,12 @@ while True:
     #cv.imshow("frame", frame)
     #uncomment previous line for raw frame
 
+
     blurCoefficient = cv.getTrackbarPos("GaussBlur", "Parameters")
-    bluredFrame = cv.GaussianBlur(frame, (7, 7), blurCoefficient)
+    bluredFrame = cv.GaussianBlur(frame, (5, 5), blurCoefficient)
     #cv.imshow("blured frame", bluredFrame)
     #uncomment previous line for blured frame
+    #bluredFrame = cv.fastNlMeansDenoisingColored(bluredFrame, None, 10, 10, 21, 7)
 
     grayFrame = cv.cvtColor(bluredFrame, cv.COLOR_BGR2GRAY)
     cv.imshow("gray frame", grayFrame)
