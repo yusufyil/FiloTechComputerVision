@@ -114,9 +114,9 @@ while True:
         if width // 2 + (width // 10) > center_of_circle_x > width // 2 - (width // 10):
             print("Go ahead! ^^^^^^^^^^^^^")
         elif center_of_circle_x > width // 2 + (width // 10):
-            print("Turn right! <<<<<<<<<<<<")
+            print("Turn right! >>>>>>>>>>>>")
         elif center_of_circle_x < width // 2 - (width // 10):
-            print("Turn left! >>>>>>>>>>>>")
+            print("Turn left! <<<<<<<<<<<<")
 
     cv.imshow("Final Frame", frame)
 
