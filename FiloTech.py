@@ -1,3 +1,4 @@
+import math
 import time
 
 import cv2 as cv
@@ -21,12 +22,18 @@ class ResultSet:
     def insert(self, bounding_box):
         self.storage[self.index] = bounding_box
         self.index = (self.index + 1) % self.numberOfFrames
-    def calculateAverage(self, list = [], order = 0):
+
+    def calculateAverage(self, list=[], order=0):
         summation = 0
+        number_0f_zeroes = 0
         for i in range(self.numberOfFrames):
             summation += self.storage[i][order]
-        average = summation // self.numberOfFrames
-        return average
+            if self.storage[i][3] == 0:
+                number_0f_zeroes += 1
+        if number_0f_zeroes >= self.numberOfFrames // 2:
+            return 0
+        else:
+            return summation // (self.numberOfFrames - number_0f_zeroes)
 
     def getAverage(self):
         averageX = self.calculateAverage(self.storage, 0)
@@ -58,7 +65,7 @@ def filterImage(video_frame):
     return dilatedFrame
 
 
-rs = ResultSet(3)
+rs = ResultSet(10)
 
 while True:
 
@@ -94,8 +101,22 @@ while True:
 
     box = rs.getAverage()
     if box[3] != 0:
-        cv.rectangle(frame, (box[0], box[1]), (box[0] + box[2], box[1] + box[3]), (0, 255, 0), 5)
-
+        cv.rectangle(frame, (box[0], box[1]), (box[0] + box[2], box[1] + box[3]), (0, 0, 255), 5)
+    # rest of the code will maneuver robot
+    if box[2] == 0 or box[3] == 0:
+        print("Looking for circle..")
+    else:
+        center_of_circle_x = box[0] + box[2] // 2
+        center_of_circle_y = box[1] + box[3] // 2
+        print("Center coordinates of circle: ", center_of_circle_x, center_of_circle_y)
+        print("Angle of circle towards robot's front",
+              math.acos(box[3] / math.sqrt((math.pow(box[2], 2) + math.pow(box[3], 2)))))
+        if width // 2 + (width // 10) > center_of_circle_x > width // 2 - (width // 10):
+            print("Go ahead! ^^^^^^^^^^^^^")
+        elif center_of_circle_x > width // 2 + (width // 10):
+            print("Turn right! <<<<<<<<<<<<")
+        elif center_of_circle_x < width // 2 - (width // 10):
+            print("Turn left! >>>>>>>>>>>>")
 
     cv.imshow("Final Frame", frame)
 
@@ -103,31 +124,3 @@ while True:
     if key == ord('q'):
         break
 
-"""
-cv.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 5)
-                cv.putText(frame, "Points: " + str(len(approx)), (x + w + 20, y + 20), cv.FONT_HERSHEY_COMPLEX, .7,
-                           (0, 255, 0), 2)
-                cv.putText(frame, "Area: " + str(int(contourArea)), (x + w + 20, y + 45), cv.FONT_HERSHEY_COMPLEX, 0.7,
-                           (0, 255, 0), 2)
-"""
-
-"""
-for calculating fps
-
-
-prev_frame_time = 0
-new_frame_time = 0
-
-
-new_frame_time = time.time()
-    fps = 1 / (new_frame_time - prev_frame_time)
-    prev_frame_time = new_frame_time
-    print(fps)
-    
-    cv.putText(frame, "Points: " + str(len(approx)), (box[0] + box[2] + 20, box[1] + 20),
-                           cv.FONT_HERSHEY_COMPLEX, .7, (0, 255, 0), 2)
-                cv.putText(frame, "Area: " + str(int(contourArea)), (box[0] + box[2] + 20, box[1] + 45),
-                           cv.FONT_HERSHEY_COMPLEX, 0.7, (0, 255, 0), 2)
-    
-    
-    """
