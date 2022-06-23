@@ -1,5 +1,4 @@
 import math
-import time
 
 import cv2 as cv
 import numpy as np
@@ -14,28 +13,27 @@ kernel = np.ones((5, 5))
 
 class ResultSet:
     def __init__(self, numberOfFrames):
-        self.numberOfFrames = numberOfFrames
-        self.index = 0
-        self.storage = [[0, 0, 0, 0] for i in range(self.numberOfFrames)]
-        self.average_result = []
-
-    def insert(self, bounding_box):
+        self.numberOfFrames = numberOfFrames #değerlendirilmeye alınması istenen toplam frame sayısı belirleniyor
+        self.index = 0 #yeni görünütü geldikçe hangi indexe yüklenmesi gerektiğini belirleyen değişken oluşturuluyor
+        self.storage = [[0, 0, 0, 0] for i in range(self.numberOfFrames)] # başlangıç için bütün frameler sıfırlanıyor
+        self.average_result = [] # ortalama sonucu tutan değişken oluşturuluyor
+    def insert(self, bounding_box): # yeni gelen görütüyü ekleyen metot oluşturuluyor
         self.storage[self.index] = bounding_box
         self.index = (self.index + 1) % self.numberOfFrames
-
-    def calculateAverage(self, list=[], order=0):
-        summation = 0
-        number_0f_zeroes = 0
-        for i in range(self.numberOfFrames):
+    def calculateAverage(self, list=[], order=0): # gelen framelerden istenen sonucu üreten metot oluşturuluyor
+        summation = 0 #tespit edilen çemberlerin toplamı
+        number_0f_zeroes = 0 # kayıtlarda çember tespiti yapılamayan toplam frame sayısı
+        for i in range(self.numberOfFrames): #bir döngü yardımıyla bütün kayıtlar dolaşılıyor
             summation += self.storage[i][order]
             if self.storage[i][3] == 0:
                 number_0f_zeroes += 1
         if number_0f_zeroes >= self.numberOfFrames // 2:
+            #eğer çember tespiti yapılamayan frame sayısı %50 yi geçtiyse çember tespiti ypılamadı bilgisi dönüyor
             return 0
         else:
+            #aksi durumda tepit edilen çemberlerin ortalaması geri döndürülüyor
             return summation // (self.numberOfFrames - number_0f_zeroes)
-
-    def getAverage(self):
+    def getAverage(self): # koordinaltar, en ve boy değişkenleri için ortalam hesaplayan bir metot
         averageX = self.calculateAverage(self.storage, 0)
         averageY = self.calculateAverage(self.storage, 1)
         averageW = self.calculateAverage(self.storage, 2)
